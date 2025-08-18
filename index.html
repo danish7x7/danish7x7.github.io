@@ -6,6 +6,11 @@
     <title>Danishbir Singh - Portfolio</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/Draggable.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/Flip.min.js" defer></script>
+
     <!-- NEW: Tilt library -->
     <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.1/dist/vanilla-tilt.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -124,6 +129,122 @@
             .nav-links { display: none; }
             .section { padding: 3rem 2rem; }
         }
+        /* --- Projects: horizontal → ring → tunnel --- */
+        .projects-scroller { padding-top: 4rem; padding-bottom: 0; }
+        .projects-title { text-align: center; margin-bottom: 1rem; }
+
+        .projects-viewport{
+            --card-w: 420px;
+            --card-h: 260px;
+            --gap: 24px;
+            height: 80vh;
+            overflow: hidden;
+            position: relative;
+            display: grid;
+            place-items: center;
+            perspective: 1200px;              /* needed for 3D ring/tunnel */
+            transform-style: preserve-3d;
+        }
+
+        @media (max-width: 768px){
+        .projects-viewport{ --card-w: 320px; --card-h: 200px; --gap: 16px; height: 70vh; }
+        }
+
+        .projects-axis{
+            display: flex; align-items: center;
+            gap: var(--gap);
+            will-change: transform;
+            transform-style: preserve-3d;
+        }
+
+        /* Card */
+        .proj-card{
+            width: var(--card-w);
+            height: var(--card-h);
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg,#67e8f9,#3b82f6,#a855f7,#ec4899);
+            background-size: 300% 300%;
+            animation: projGrad 12s ease infinite;
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            user-select: none;
+        }
+        @keyframes projGrad {
+            0%{ background-position: 0% 50%; }
+            50%{ background-position: 100% 50%; }
+            100%{ background-position: 0% 50%; }
+        }
+        .proj-card a{ position:absolute; inset:0; display:block; }
+        .proj-title{
+            position: absolute; left: 12px; bottom: 10px;
+            font-weight: 700; letter-spacing: 0.3px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.45);
+        }
+
+        /* Hover overlay */
+        .proj-overlay{
+            position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+            background: radial-gradient(closest-side, rgba(255,255,255,0.15), rgba(0,0,0,0.45));
+            opacity: 0; transition: opacity .25s ease;
+            pointer-events: none;
+        }
+        .proj-card:hover .proj-overlay{ opacity: 1; }
+        .proj-cta{
+            padding: .6rem 1rem; border-radius: 999px; font-weight: 700;
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.35);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Center text for ring phase */
+        .projects-center{
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            pointer-events: none;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity .5s ease, transform .5s ease;
+        }
+
+        .projects-center span{
+            font-size: clamp(1.6rem, 4vw, 3rem);
+            font-weight: 800;
+            letter-spacing: .5px;
+            background: linear-gradient(135deg,#ffffff,#c9d1d9);
+
+        /* add the standard property first (fixes the linter warning) */
+            background-clip: text;                 /* standard */
+
+        /* keep WebKit versions for Chrome/Safari/Edge */
+            -webkit-background-clip: text;
+            color: transparent;                    /* standard */
+            -webkit-text-fill-color: transparent;  /* WebKit */
+        }
+
+
+        /* Ring mode: cards are positioned around Y axis */
+        .projects-viewport.is-ring .projects-center{ opacity: 1; transform: scale(1); }
+
+        /* Tunnel: fade + disable pointer events */
+        .projects-viewport.tunnel .proj-card{ opacity: .15; filter: blur(1px); }
+        .projects-viewport.disable-links .proj-card a{ pointer-events: none !important; }
+
+        /* Accessibility improvements for keyboard focus */
+        .proj-card a:focus{
+        outline: none;
+        }
+        .proj-card:focus-within{
+        box-shadow: 0 0 0 3px rgba(99,102,241,.65);
+        }
+
+        /* Optional subtle hover (desktop) */
+        @media (hover:hover){
+        .proj-card:hover{ transform: translateZ(8px) scale(1.04); transition: transform .2s ease; }
+        }
     </style>
 </head>
 <body>
@@ -205,55 +326,20 @@
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="section">
-        <h2>My Projects</h2>
-        <div class="projects-grid">
-            <div class="project-card">
-                <h3>E-Commerce Platform</h3>
-                <p>A full-stack e-commerce solution with React frontend, Node.js backend, and MongoDB database. Features include user authentication, payment processing, and admin dashboard.</p>
-                <div class="project-tech">
-                    <span class="tech-tag">React</span>
-                    <span class="tech-tag">Node.js</span>
-                    <span class="tech-tag">MongoDB</span>
-                    <span class="tech-tag">Stripe</span>
-                </div>
-                <div class="project-links">
-                    <a href="#" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-                    <a href="#" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
-                </div>
-            </div>
+    <section id="projects" class="section projects-scroller">
+        <h2 class="projects-title">Projects</h2>
 
-            <div class="project-card">
-                <h3>Task Management App</h3>
-                <p>A productivity app built with React and Firebase. Features real-time collaboration, drag-and-drop functionality, and responsive design.</p>
-                <div class="project-tech">
-                    <span class="tech-tag">React</span>
-                    <span class="tech-tag">Firebase</span>
-                    <span class="tech-tag">Material-UI</span>
-                    <span class="tech-tag">PWA</span>
-                </div>
-                <div class="project-links">
-                    <a href="#" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-                    <a href="#" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
-                </div>
-            </div>
+        <div class="projects-viewport" id="projectsViewport" aria-label="Projects carousel">
+        <!-- Cards are injected by JS into the axis -->
+            <div class="projects-axis" id="projectsAxis" aria-live="polite"></div>
 
-            <div class="project-card">
-                <h3>Weather Dashboard</h3>
-                <p>A beautiful weather application with animated backgrounds, location-based forecasts, and detailed weather metrics using OpenWeatherMap API.</p>
-                <div class="project-tech">
-                    <span class="tech-tag">Vanilla JS</span>
-                    <span class="tech-tag">CSS3</span>
-                    <span class="tech-tag">API Integration</span>
-                    <span class="tech-tag">Anime.js</span>
-                </div>
-                <div class="project-links">
-                    <a href="#" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-                    <a href="#" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
-                </div>
+            <!-- Center text used in ring/tunnel phases -->
+            <div class="projects-center" aria-hidden="true">
+                <span>Projects</span>
             </div>
         </div>
     </section>
+
 
     <!-- Contact Section -->
     <section id="contact" class="section">
@@ -265,11 +351,8 @@
                 <a href="https://github.com/danish7x7" class="social-link" target="_blank">
                     <i class="fab fa-github"></i>
                 </a>
-                <a href="#" class="social-link" target="_blank">
+                <a href="https://www.linkedin.com/in/danishbir-singh-bhatti/" class="social-link" target="_blank">
                     <i class="fab fa-linkedin"></i>
-                </a>
-                <a href="#" class="social-link" target="_blank">
-                    <i class="fab fa-twitter"></i>
                 </a>
                 <a href="mailto:danishbirsinghbhatti@gmail.com" class="social-link">
                     <i class="fas fa-envelope"></i>
@@ -466,10 +549,10 @@
                         }
                         if (target.matches('.skill-item')) {
                             anime({ targets: '.skill-item', opacity: [0, 1], translateY: [30, 0], duration: 800, delay: anime.stagger(100), easing: 'easeOutExpo' });
-                        }
+                        }/*
                         if (target.matches('.project-card')) {
                             anime({ targets: '.project-card', opacity: [0, 1], translateY: [50, 0], duration: 1000, delay: anime.stagger(200), easing: 'easeOutExpo' });
-                        }
+                        }*/
                         if (target.matches('.social-link')) {
                             anime({ targets: '.social-link', opacity: [0, 1], scale: [0.5, 1], duration: 600, delay: anime.stagger(100), easing: 'easeOutBack' });
                         }
@@ -566,5 +649,191 @@
             });
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        gsap.registerPlugin(ScrollTrigger, Draggable, Flip);
+
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const viewport = document.getElementById('projectsViewport');
+        const axis = document.getElementById('projectsAxis');
+        const centerLabel = viewport.querySelector('.projects-center span');
+
+        // ------------- DATA (placeholders; change later) -------------
+        const projectsData = [
+            { title: 'E-Commerce Platform',  url: 'https://github.com/danish7x7/ecommerce-platform' },
+            { title: 'Task Manager',         url: 'https://github.com/danish7x7/task-manager' },
+            { title: 'Weather Dashboard',    url: 'https://github.com/danish7x7/weather-dashboard' },
+            { title: 'Marketplace Analytics',url: 'https://github.com/danish7x7/marketplace-analytics' },
+            { title: 'Bug Bite Detection',   url: 'https://github.com/danish7x7/bug-bite-detection' },
+            { title: 'Addiction Analysis',   url: 'https://github.com/danish7x7/addiction-analysis' },
+        ];
+        centerLabel.textContent = 'Projects';
+
+        // ------------- BUILD CARDS -------------
+        function buildCards(){
+            axis.innerHTML = '';
+            projectsData.forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'proj-card';
+            // title
+            const title = document.createElement('div');
+            title.className = 'proj-title';
+            title.textContent = p.title;
+            // overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'proj-overlay';
+            overlay.innerHTML = '<span class="proj-cta">View on GitHub →</span>';
+            // link
+            const link = document.createElement('a');
+            link.href = p.url;
+            link.target = '_blank';
+            link.rel = 'noopener';
+            link.setAttribute('aria-label', p.title + ' – open on GitHub');
+
+            card.appendChild(title);
+            card.appendChild(overlay);
+            card.appendChild(link);
+            axis.appendChild(card);
+            });
+        }
+        buildCards();
+
+        // For seamless marquee, ensure axis content is >2× viewport width
+        const original = axis.innerHTML;
+        function ensureLoopWidth(){
+            while (axis.scrollWidth < viewport.clientWidth * 2.2) {
+            axis.insertAdjacentHTML('beforeend', original);
+            }
+        }
+        ensureLoopWidth();
+
+        // ------------- MARQUEE DRIFT -------------
+        let driftTween = null;
+        function startDrift(){
+            killDrift();
+            const half = axis.scrollWidth / 2; // because duplicated content ≈ double
+            driftTween = gsap.to(axis, {
+            x: -half,
+            duration: 30,          // full cycle 30s (your spec)
+            ease: 'none',
+            repeat: -1,
+            onRepeat: () => gsap.set(axis, {x: 0})
+            });
+        }
+        function killDrift(){ if (driftTween) { driftTween.kill(); driftTween = null; } }
+
+        // Pause drift on hover/focus, resume on leave/blur
+        axis.addEventListener('mouseenter', () => driftTween && driftTween.pause());
+        axis.addEventListener('mouseleave', () => driftTween && driftTween.resume());
+        axis.addEventListener('focusin',  () => driftTween && driftTween.pause());
+        axis.addEventListener('focusout', () => driftTween && driftTween.resume());
+
+        // ------------- RING (DESKTOP/TABLET ONLY) -------------
+        let ringTween = null;
+        const RING_RADIUS = 520;     // default radius
+        function morphToRing(){
+            if (isMobile) return;      // skip on phones
+
+            // capture current state for FLIP
+            const state = Flip.getState('.proj-card');
+
+            // Layout as ring: absolute at center, rotateY(angle) translateZ(radius)
+            viewport.classList.add('is-ring');
+            axis.style.position = 'absolute';
+            axis.style.left = '50%';
+            axis.style.top = '50%';
+            axis.style.transform = 'translate(-50%,-50%)';
+            axis.style.display = 'block';
+            axis.style.gap = '0';
+
+            const cards = gsap.utils.toArray('.proj-card');
+            const N = cards.length;
+            cards.forEach((card, i) => {
+            card.style.position = 'absolute';
+            card.style.left = '50%';
+            card.style.top = '50%';
+            card.style.margin = '0';
+            const angle = (360 / N) * i;
+            card.style.transform = `rotateY(${angle}deg) translateZ(${RING_RADIUS}px)`;
+            });
+
+            Flip.from(state, { duration: 0.9, ease: 'power2.inOut' });
+        }
+
+        function startRingRotation(){
+            if (isMobile) return;
+            if (ringTween) ringTween.kill();
+            ringTween = gsap.to(axis, {
+            rotationY: '+=360',
+            transformOrigin: '50% 50% 0',
+            duration: 30,            // one full turn every 30s
+            ease: 'none',
+            repeat: -1
+            });
+        }
+        function killRingRotation(){ if (ringTween) { ringTween.kill(); ringTween = null; } }
+
+        // ------------- TUNNEL (quick) -------------
+        function tunnelOut(){
+            if (isMobile) return;
+            viewport.classList.add('disable-links');  // prevent accidental opens
+            viewport.classList.add('tunnel');
+
+            // Quick zoom away & fade
+            gsap.to(axis, {
+            z: -1400,                // translateZ back
+            opacity: 0,
+            duration: 0.9,           // quick tunnel
+            ease: 'power3.in'
+            });
+        }
+
+        // ------------- MOBILE: DRAG/SWIPE -------------
+        if (isMobile){
+            Draggable.create(axis, {
+            type: 'x',
+            bounds: { minX: -(axis.scrollWidth - viewport.clientWidth), maxX: 0 },
+            edgeResistance: 0.85,
+            onDragStart: () => killDrift(),
+            onDragEnd:   () => startDrift()
+            });
+        }
+
+        // ------------- MASTER SCROLL TIMELINE -------------
+        // Pin projects section; orchestrate phases
+        const tl = gsap.timeline({
+            defaults: { ease: 'power3.out' },
+            scrollTrigger: {
+            trigger: '.projects-scroller',
+            start: 'top top',
+            end: '+=2400',      // total scroll length while pinned
+            scrub: 1,
+            pin: true,
+            anticipatePin: 1,
+            onEnter: () => startDrift(),
+            onLeave: () => { killDrift(); killRingRotation(); },
+            onLeaveBack: () => { killDrift(); killRingRotation(); }
+            }
+        });
+
+        // phase 1: slide in from right → settle
+        tl.from(axis, { xPercent: 100, duration: 0.6 });
+
+        // wait a bit while drifting, then morph to ring
+        tl.add(() => { if (!isMobile) { killDrift(); morphToRing(); } }, '+=1.2');  // your delay
+        tl.add(() => { if (!isMobile) startRingRotation(); }, '+=0.1');
+
+        // phase 3: quick tunnel to contact
+        tl.add(() => { if (!isMobile) tunnelOut(); }, '+=0.6');
+
+        // Restart drift if user scrolls back up
+        ScrollTrigger.create({
+            trigger: '.projects-scroller',
+            start: 'top top',
+            end: 'bottom top',
+            onEnterBack: () => { if (!isMobile) killRingRotation(); startDrift(); viewport.classList.remove('disable-links','tunnel','is-ring'); axis.removeAttribute('style'); buildCards(); ensureLoopWidth(); },
+        });
+    });
+</script>
 </body>
 </html>
