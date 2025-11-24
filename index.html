@@ -709,29 +709,33 @@
         function startSlowMotion(){
             killDrift();
             const half = axis.scrollWidth / 2;
-            const currentPosition = gsap.getProperty(axis, "x") || 0;
+            let currentPosition = gsap.getProperty(axis, "x") || 0;
             
-            // Calculate target position - always move leftward (negative direction)
-            let targetX = currentPosition - half;
-            
-            // If we've already passed the reset point, reset to 0 first
+            // Normalize position if we're past the reset point (seamless loop)
             if (currentPosition <= -half) {
-                gsap.set(axis, {x: 0});
-                targetX = -half;
+                currentPosition = currentPosition + half;
+                gsap.set(axis, {x: currentPosition});
             }
             
-            // Calculate duration based on distance to maintain consistent speed
+            // Calculate target: move from current position to reset point
+            const targetX = currentPosition - half;
             const distance = Math.abs(targetX - currentPosition);
-            const speed = half / 75; // pixels per second (half width in 75 seconds)
+            const speed = half / 75; // pixels per second
             const duration = distance / speed;
             
+            // Create continuous loop animation
             driftTween = gsap.to(axis, {
                 x: targetX,
-                duration: duration || 75, // Use calculated duration or default
+                duration: duration || 75,
                 ease: 'none',
-                repeat: -1,
+                repeat: -1, // Infinite repeat
                 onRepeat: () => {
-                    gsap.set(axis, {x: 0});
+                    // Seamless reset: when we reach -half, duplicate content is aligned
+                    // with original at 0, so we can reset without visual jump
+                    const pos = gsap.getProperty(axis, "x");
+                    if (pos <= -half) {
+                        gsap.set(axis, {x: pos + half});
+                    }
                 }
             });
         }
@@ -766,7 +770,7 @@
             },
             edgeResistance: 0.85,
             inertia: true,
-            throwResistance: 2000, // Higher resistance = slower deceleration (more momentum)
+            throwResistance: 5000, // Higher resistance = slower deceleration (more momentum)
             onDragStart: () => {
                 isDragging = true;
                 killDrift();
