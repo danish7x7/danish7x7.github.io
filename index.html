@@ -709,24 +709,29 @@
         function startSlowMotion(){
             killDrift();
             const half = axis.scrollWidth / 2;
-            const currentPosition = gsap.getProperty(axis, "x");
+            const currentPosition = gsap.getProperty(axis, "x") || 0;
             
-            // Calculate target position based on current position
+            // Calculate target position - always move leftward (negative direction)
             let targetX = currentPosition - half;
-            if (targetX <= -half) {
-                targetX = 0;
+            
+            // If we've already passed the reset point, reset to 0 first
+            if (currentPosition <= -half) {
+                gsap.set(axis, {x: 0});
+                targetX = -half;
             }
+            
+            // Calculate duration based on distance to maintain consistent speed
+            const distance = Math.abs(targetX - currentPosition);
+            const speed = half / 75; // pixels per second (half width in 75 seconds)
+            const duration = distance / speed;
             
             driftTween = gsap.to(axis, {
                 x: targetX,
-                duration: 75, // Slow motion: 75 seconds for full cycle
+                duration: duration || 75, // Use calculated duration or default
                 ease: 'none',
                 repeat: -1,
                 onRepeat: () => {
-                    const current = gsap.getProperty(axis, "x");
-                    if (current <= -half) {
-                        gsap.set(axis, {x: 0});
-                    }
+                    gsap.set(axis, {x: 0});
                 }
             });
         }
@@ -761,18 +766,20 @@
             },
             edgeResistance: 0.85,
             inertia: true,
+            throwResistance: 2000, // Higher resistance = slower deceleration (more momentum)
             onDragStart: () => {
                 isDragging = true;
                 killDrift();
             },
             onDragEnd: () => {
                 isDragging = false;
-                // Resume slow motion after a brief delay, continuing from current position
-                setTimeout(() => {
-                    if (!isDragging) {
-                        startSlowMotion();
-                    }
-                }, 300);
+                // Don't resume immediately - let inertia complete first
+            },
+            onThrowComplete: () => {
+                // Inertia has finished, now resume slow motion from current position
+                if (!isDragging) {
+                    startSlowMotion();
+                }
             }
         })[0];
 
