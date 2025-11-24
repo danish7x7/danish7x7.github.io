@@ -129,9 +129,9 @@
             .nav-links { display: none; }
             .section { padding: 3rem 2rem; }
         }
-        /* --- Projects: horizontal → ring → tunnel --- */
-        .projects-scroller { padding-top: 4rem; padding-bottom: 0; }
-        .projects-title { text-align: center; margin-bottom: 1rem; }
+        /* --- Projects: train-like horizontal entry --- */
+        .projects-scroller { padding-top: 4rem; padding-bottom: 4rem; }
+        .projects-title { text-align: center; margin-bottom: 2rem; }
 
         .projects-viewport{
             --card-w: 420px;
@@ -140,10 +140,8 @@
             height: 80vh;
             overflow: hidden;
             position: relative;
-            display: grid;
-            place-items: center;
-            perspective: 1200px;              /* needed for 3D ring/tunnel */
-            transform-style: preserve-3d;
+            display: flex;
+            align-items: center;
         }
 
         @media (max-width: 768px){
@@ -151,10 +149,15 @@
         }
 
         .projects-axis{
-            display: flex; align-items: center;
+            display: flex; 
+            align-items: center;
             gap: var(--gap);
             will-change: transform;
-            transform-style: preserve-3d;
+            cursor: grab;
+        }
+        
+        .projects-axis:active {
+            cursor: grabbing;
         }
 
         /* Card */
@@ -198,40 +201,6 @@
             backdrop-filter: blur(4px);
         }
 
-        /* Center text for ring phase */
-        .projects-center{
-            position: absolute;
-            inset: 0;
-            display: grid;
-            place-items: center;
-            pointer-events: none;
-            opacity: 0;
-            transform: scale(0.95);
-            transition: opacity .5s ease, transform .5s ease;
-        }
-
-        .projects-center span{
-            font-size: clamp(1.6rem, 4vw, 3rem);
-            font-weight: 800;
-            letter-spacing: .5px;
-            background: linear-gradient(135deg,#ffffff,#c9d1d9);
-
-        /* add the standard property first (fixes the linter warning) */
-            background-clip: text;                 /* standard */
-
-        /* keep WebKit versions for Chrome/Safari/Edge */
-            -webkit-background-clip: text;
-            color: transparent;                    /* standard */
-            -webkit-text-fill-color: transparent;  /* WebKit */
-        }
-
-
-        /* Ring mode: cards are positioned around Y axis */
-        .projects-viewport.is-ring .projects-center{ opacity: 1; transform: scale(1); }
-
-        /* Tunnel: fade + disable pointer events */
-        .projects-viewport.tunnel .proj-card{ opacity: .15; filter: blur(1px); }
-        .projects-viewport.disable-links .proj-card a{ pointer-events: none !important; }
 
         /* Accessibility improvements for keyboard focus */
         .proj-card a:focus{
@@ -243,7 +212,7 @@
 
         /* Optional subtle hover (desktop) */
         @media (hover:hover){
-        .proj-card:hover{ transform: translateZ(8px) scale(1.04); transition: transform .2s ease; }
+        .proj-card:hover{ transform: scale(1.05); transition: transform .2s ease; }
         }
     </style>
 </head>
@@ -330,13 +299,7 @@
         <h2 class="projects-title">Projects</h2>
 
         <div class="projects-viewport" id="projectsViewport" aria-label="Projects carousel">
-        <!-- Cards are injected by JS into the axis -->
             <div class="projects-axis" id="projectsAxis" aria-live="polite"></div>
-
-            <!-- Center text used in ring/tunnel phases -->
-            <div class="projects-center" aria-hidden="true">
-                <span>Projects</span>
-            </div>
         </div>
     </section>
 
@@ -651,14 +614,12 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-        gsap.registerPlugin(ScrollTrigger, Draggable, Flip);
+        gsap.registerPlugin(Draggable);
 
-        const isMobile = window.matchMedia('(max-width: 768px)').matches;
         const viewport = document.getElementById('projectsViewport');
         const axis = document.getElementById('projectsAxis');
-        const centerLabel = viewport.querySelector('.projects-center span');
 
-        // ------------- DATA (placeholders; change later) -------------
+        // ------------- PROJECT DATA -------------
         const projectsData = [
             { title: 'E-Commerce Platform',  url: 'https://github.com/danish7x7/ecommerce-platform' },
             { title: 'Task Manager',         url: 'https://github.com/danish7x7/task-manager' },
@@ -667,171 +628,160 @@
             { title: 'Bug Bite Detection',   url: 'https://github.com/danish7x7/bug-bite-detection' },
             { title: 'Addiction Analysis',   url: 'https://github.com/danish7x7/addiction-analysis' },
         ];
-        centerLabel.textContent = 'Projects';
 
         // ------------- BUILD CARDS -------------
         function buildCards(){
             axis.innerHTML = '';
             projectsData.forEach(p => {
-            const card = document.createElement('div');
-            card.className = 'proj-card';
-            // title
-            const title = document.createElement('div');
-            title.className = 'proj-title';
-            title.textContent = p.title;
-            // overlay
-            const overlay = document.createElement('div');
-            overlay.className = 'proj-overlay';
-            overlay.innerHTML = '<span class="proj-cta">View on GitHub →</span>';
-            // link
-            const link = document.createElement('a');
-            link.href = p.url;
-            link.target = '_blank';
-            link.rel = 'noopener';
-            link.setAttribute('aria-label', p.title + ' – open on GitHub');
+                const card = document.createElement('div');
+                card.className = 'proj-card';
+                
+                const title = document.createElement('div');
+                title.className = 'proj-title';
+                title.textContent = p.title;
+                
+                const overlay = document.createElement('div');
+                overlay.className = 'proj-overlay';
+                overlay.innerHTML = '<span class="proj-cta">View on GitHub →</span>';
+                
+                const link = document.createElement('a');
+                link.href = p.url;
+                link.target = '_blank';
+                link.rel = 'noopener';
+                link.setAttribute('aria-label', p.title + ' – open on GitHub');
 
-            card.appendChild(title);
-            card.appendChild(overlay);
-            card.appendChild(link);
-            axis.appendChild(card);
+                card.appendChild(title);
+                card.appendChild(overlay);
+                card.appendChild(link);
+                axis.appendChild(card);
             });
         }
         buildCards();
 
-        // For seamless marquee, ensure axis content is >2× viewport width
+        // Duplicate cards for seamless loop
         const original = axis.innerHTML;
         function ensureLoopWidth(){
             while (axis.scrollWidth < viewport.clientWidth * 2.2) {
-            axis.insertAdjacentHTML('beforeend', original);
+                axis.insertAdjacentHTML('beforeend', original);
             }
         }
         ensureLoopWidth();
 
-        // ------------- MARQUEE DRIFT -------------
-        let driftTween = null;
-        function startDrift(){
-            killDrift();
-            const half = axis.scrollWidth / 2; // because duplicated content ≈ double
-            driftTween = gsap.to(axis, {
-            x: -half,
-            duration: 30,          // full cycle 30s (your spec)
-            ease: 'none',
-            repeat: -1,
-            onRepeat: () => gsap.set(axis, {x: 0})
+        // ------------- TRAIN-LIKE ENTRY ANIMATION -------------
+        const cards = gsap.utils.toArray('.proj-card');
+        const viewportWidth = viewport.clientWidth;
+        const cardWidth = parseFloat(getComputedStyle(viewport).getPropertyValue('--card-w'));
+        
+        // Calculate each card's natural position in the flex container
+        // Then set them all to start off-screen to the right
+        cards.forEach((card, index) => {
+            // Get the card's position relative to the axis
+            const cardRect = card.getBoundingClientRect();
+            const axisRect = axis.getBoundingClientRect();
+            const naturalX = cardRect.left - axisRect.left;
+            
+            // Start each card off-screen to the right, maintaining their relative spacing
+            gsap.set(card, {
+                x: viewportWidth + cardWidth - naturalX,
+                opacity: 0
             });
-        }
-        function killDrift(){ if (driftTween) { driftTween.kill(); driftTween = null; } }
-
-        // Pause drift on hover/focus, resume on leave/blur
-        axis.addEventListener('mouseenter', () => driftTween && driftTween.pause());
-        axis.addEventListener('mouseleave', () => driftTween && driftTween.resume());
-        axis.addEventListener('focusin',  () => driftTween && driftTween.pause());
-        axis.addEventListener('focusout', () => driftTween && driftTween.resume());
-
-        // ------------- RING (DESKTOP/TABLET ONLY) -------------
-        let ringTween = null;
-        const RING_RADIUS = 520;     // default radius
-        function morphToRing(){
-            if (isMobile) return;      // skip on phones
-
-            // capture current state for FLIP
-            const state = Flip.getState('.proj-card');
-
-            // Layout as ring: absolute at center, rotateY(angle) translateZ(radius)
-            viewport.classList.add('is-ring');
-            axis.style.position = 'absolute';
-            axis.style.left = '50%';
-            axis.style.top = '50%';
-            axis.style.transform = 'translate(-50%,-50%)';
-            axis.style.display = 'block';
-            axis.style.gap = '0';
-
-            const cards = gsap.utils.toArray('.proj-card');
-            const N = cards.length;
-            cards.forEach((card, i) => {
-            card.style.position = 'absolute';
-            card.style.left = '50%';
-            card.style.top = '50%';
-            card.style.margin = '0';
-            const angle = (360 / N) * i;
-            card.style.transform = `rotateY(${angle}deg) translateZ(${RING_RADIUS}px)`;
-            });
-
-            Flip.from(state, { duration: 0.9, ease: 'power2.inOut' });
-        }
-
-        function startRingRotation(){
-            if (isMobile) return;
-            if (ringTween) ringTween.kill();
-            ringTween = gsap.to(axis, {
-            rotationY: '+=360',
-            transformOrigin: '50% 50% 0',
-            duration: 30,            // one full turn every 30s
-            ease: 'none',
-            repeat: -1
-            });
-        }
-        function killRingRotation(){ if (ringTween) { ringTween.kill(); ringTween = null; } }
-
-        // ------------- TUNNEL (quick) -------------
-        function tunnelOut(){
-            if (isMobile) return;
-            viewport.classList.add('disable-links');  // prevent accidental opens
-            viewport.classList.add('tunnel');
-
-            // Quick zoom away & fade
-            gsap.to(axis, {
-            z: -1400,                // translateZ back
-            opacity: 0,
-            duration: 0.9,           // quick tunnel
-            ease: 'power3.in'
-            });
-        }
-
-        // ------------- MOBILE: DRAG/SWIPE -------------
-        if (isMobile){
-            Draggable.create(axis, {
-            type: 'x',
-            bounds: { minX: -(axis.scrollWidth - viewport.clientWidth), maxX: 0 },
-            edgeResistance: 0.85,
-            onDragStart: () => killDrift(),
-            onDragEnd:   () => startDrift()
-            });
-        }
-
-        // ------------- MASTER SCROLL TIMELINE -------------
-        // Pin projects section; orchestrate phases
-        const tl = gsap.timeline({
-            defaults: { ease: 'power3.out' },
-            scrollTrigger: {
-            trigger: '.projects-scroller',
-            start: 'top top',
-            end: '+=2400',      // total scroll length while pinned
-            scrub: 1,
-            pin: true,
-            anticipatePin: 1,
-            onEnter: () => startDrift(),
-            onLeave: () => { killDrift(); killRingRotation(); },
-            onLeaveBack: () => { killDrift(); killRingRotation(); }
-            }
         });
 
-        // phase 1: slide in from right → settle
-        tl.from(axis, { xPercent: 100, duration: 0.6 });
+        // Animate cards entering from right in train-like sequence
+        const entryTimeline = gsap.timeline({
+            onComplete: startSlowMotion
+        });
 
-        // wait a bit while drifting, then morph to ring
-        tl.add(() => { if (!isMobile) { killDrift(); morphToRing(); } }, '+=1.2');  // your delay
-        tl.add(() => { if (!isMobile) startRingRotation(); }, '+=0.1');
+        // Each card moves to its natural position (x: 0) with a stagger
+        entryTimeline.to(cards, {
+            x: 0,
+            opacity: 1,
+            duration: 1.2,
+            stagger: 0.15, // 0.15s delay between each card (train effect)
+            ease: 'power3.out'
+        });
 
-        // phase 3: quick tunnel to contact
-        tl.add(() => { if (!isMobile) tunnelOut(); }, '+=0.6');
+        // ------------- SLOW MOTION DRIFT -------------
+        let driftTween = null;
+        let isDragging = false;
+        let currentX = 0;
 
-        // Restart drift if user scrolls back up
-        ScrollTrigger.create({
-            trigger: '.projects-scroller',
-            start: 'top top',
-            end: 'bottom top',
-            onEnterBack: () => { if (!isMobile) killRingRotation(); startDrift(); viewport.classList.remove('disable-links','tunnel','is-ring'); axis.removeAttribute('style'); buildCards(); ensureLoopWidth(); },
+        function startSlowMotion(){
+            killDrift();
+            const half = axis.scrollWidth / 2;
+            const currentPosition = gsap.getProperty(axis, "x");
+            
+            // Calculate target position based on current position
+            let targetX = currentPosition - half;
+            if (targetX <= -half) {
+                targetX = 0;
+            }
+            
+            driftTween = gsap.to(axis, {
+                x: targetX,
+                duration: 75, // Slow motion: 75 seconds for full cycle
+                ease: 'none',
+                repeat: -1,
+                onRepeat: () => {
+                    const current = gsap.getProperty(axis, "x");
+                    if (current <= -half) {
+                        gsap.set(axis, {x: 0});
+                    }
+                }
+            });
+        }
+
+        function killDrift(){
+            if (driftTween) {
+                driftTween.kill();
+                driftTween = null;
+            }
+        }
+
+        // Pause drift on hover/interaction
+        axis.addEventListener('mouseenter', () => {
+            if (driftTween && !isDragging) driftTween.pause();
+        });
+        axis.addEventListener('mouseleave', () => {
+            if (driftTween && !isDragging) driftTween.resume();
+        });
+        axis.addEventListener('focusin', () => {
+            if (driftTween && !isDragging) driftTween.pause();
+        });
+        axis.addEventListener('focusout', () => {
+            if (driftTween && !isDragging) driftTween.resume();
+        });
+
+        // ------------- DRAG FUNCTIONALITY (DESKTOP & MOBILE) -------------
+        const draggable = Draggable.create(axis, {
+            type: 'x',
+            bounds: {
+                minX: -(axis.scrollWidth - viewport.clientWidth),
+                maxX: 0
+            },
+            edgeResistance: 0.85,
+            inertia: true,
+            onDragStart: () => {
+                isDragging = true;
+                killDrift();
+            },
+            onDragEnd: () => {
+                isDragging = false;
+                // Resume slow motion after a brief delay, continuing from current position
+                setTimeout(() => {
+                    if (!isDragging) {
+                        startSlowMotion();
+                    }
+                }, 300);
+            }
+        })[0];
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            ensureLoopWidth();
+            if (draggable) {
+                draggable.update();
+            }
         });
     });
 </script>
