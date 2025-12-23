@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.1/dist/vanilla-tilt.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -39,13 +39,11 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <h1>Hi, I'm Danishbir Singh</h1>
-            <div class="subtitle">Software Developer</div>
-            <p class="description">
-                I create beautiful, responsive web applications with modern technologies. 
-                Passionate about clean code, user experience, and turning ideas into reality.
+            <h1 class="hero-title">AI/ML Enthusiast</h1>
+            <div class="hero-subtitle">Building intelligent solutions with code</div>
+            <p class="hero-description">
+                Exploring the intersection of artificial intelligence, machine learning, and modern web development.
             </p>
-            <a href="#projects" class="cta-button">View My Work</a>
         </div>
     </section>
 
@@ -97,53 +95,105 @@
         </div>
     </section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="section projects-scroller">
-        <h2 class="projects-title">Projects</h2>
-
-        <div class="projects-viewport" id="projectsViewport" aria-label="Projects carousel">
-            <div class="projects-axis" id="projectsAxis" aria-live="polite"></div>
-        </div>
-    </section>
-
-
-    <!-- Contact Section -->
-    <section id="contact" class="section">
-        <h2>Get In Touch</h2>
-        <div class="contact-content">
-            <p>I'm always open to discussing new opportunities, collaborations, or just chatting about tech!</p>
-            
-            <div class="social-links">
-                <a href="https://github.com/danish7x7" class="social-link" target="_blank">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="https://www.linkedin.com/in/danishbir-singh-bhatti/" class="social-link" target="_blank">
-                    <i class="fab fa-linkedin"></i>
-                </a>
-                <a href="mailto:danishbirsinghbhatti@gmail.com" class="social-link">
-                    <i class="fas fa-envelope"></i>
-                </a>
+    <!-- Projects Gallery Section -->
+    <section id="projects" class="projects-gallery">
+        <div class="project-card">
+            <div class="project-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop" alt="E-Commerce Platform" class="project-image" data-parallax>
             </div>
+            <div class="project-content">
+                <h3 class="project-title">E-Commerce Platform</h3>
+                <p class="project-description">A full-stack e-commerce solution with modern payment integration and inventory management.</p>
+                <a href="https://github.com/danish7x7/ecommerce-platform" class="project-link" target="_blank">View Project →</a>
+            </div>
+        </div>
 
-            <form class="contact-form" id="contactForm">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" placeholder="Your Name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" rows="5" placeholder="Your message..." required></textarea>
-                </div>
-                <button type="submit" class="submit-btn">Send Message</button>
-            </form>
+        <div class="project-card">
+            <div class="project-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=1200&h=800&fit=crop" alt="Task Manager" class="project-image" data-parallax>
+            </div>
+            <div class="project-content">
+                <h3 class="project-title">Task Manager</h3>
+                <p class="project-description">A collaborative task management application with real-time updates and team collaboration features.</p>
+                <a href="https://github.com/danish7x7/task-manager" class="project-link" target="_blank">View Project →</a>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <div class="project-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=800&fit=crop" alt="Weather Dashboard" class="project-image" data-parallax>
+            </div>
+            <div class="project-content">
+                <h3 class="project-title">Weather Dashboard</h3>
+                <p class="project-description">An interactive weather visualization dashboard with forecast predictions and location-based data.</p>
+                <a href="https://github.com/danish7x7/weather-dashboard" class="project-link" target="_blank">View Project →</a>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <div class="project-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop" alt="Marketplace Analytics" class="project-image" data-parallax>
+            </div>
+            <div class="project-content">
+                <h3 class="project-title">Marketplace Analytics</h3>
+                <p class="project-description">Advanced analytics platform for marketplace data visualization and business intelligence.</p>
+                <a href="https://github.com/danish7x7/marketplace-analytics" class="project-link" target="_blank">View Project →</a>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <div class="project-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?w=1200&h=800&fit=crop" alt="Bug Bite Detection" class="project-image" data-parallax>
+            </div>
+            <div class="project-content">
+                <h3 class="project-title">Bug Bite Detection</h3>
+                <p class="project-description">AI-powered mobile application for identifying insect bites using machine learning and image recognition.</p>
+                <a href="https://github.com/danish7x7/bug-bite-detection" class="project-link" target="_blank">View Project →</a>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <div class="project-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop" alt="Addiction Analysis" class="project-image" data-parallax>
+            </div>
+            <div class="project-content">
+                <h3 class="project-title">Addiction Analysis</h3>
+                <p class="project-description">Data-driven analysis tool for understanding patterns and trends in behavioral data.</p>
+                <a href="https://github.com/danish7x7/addiction-analysis" class="project-link" target="_blank">View Project →</a>
+            </div>
         </div>
     </section>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h2 class="footer-title">LET'S CONNECT</h2>
+            <div class="footer-info">
+                <div class="local-time">
+                    <span class="time-label">Local time:</span>
+                    <span class="time-display" id="localTime"></span>
+                </div>
+                <div class="footer-socials">
+                    <a href="https://github.com/danish7x7" class="footer-social-link" target="_blank">
+                        <span>GitHub</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/danishbir-singh-bhatti/" class="footer-social-link" target="_blank">
+                        <span>LinkedIn</span>
+                    </a>
+                    <a href="mailto:danishbirsinghbhatti@gmail.com" class="footer-social-link">
+                        <span>Email</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

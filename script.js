@@ -120,9 +120,183 @@ window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
+// Initialize Lenis Smooth Scroll
+let lenis;
+function initLenis() {
+    if (typeof Lenis !== 'undefined') {
+        lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            gestureOrientation: 'vertical',
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            // Update parallax on every frame
+            updateParallax();
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+    }
+}
+
+// Local Time Clock
+function initLocalTime() {
+    const timeDisplay = document.getElementById('localTime');
+    if (!timeDisplay) return;
+    
+    function updateTime() {
+        const now = new Date();
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
+        
+        // Format time as HH:MM:SS AM/PM
+        const period = hours >= 12 ? 'PM' : 'AM';
+        const displayHours = hours % 12 || 12;
+        const formattedMinutes = minutes.toString().padStart(2, '0');
+        const formattedSeconds = seconds.toString().padStart(2, '0');
+        
+        timeDisplay.textContent = `${displayHours}:${formattedMinutes}:${formattedSeconds} ${period}`;
+    }
+    
+    // Update immediately and then every second
+    updateTime();
+    setInterval(updateTime, 1000);
+}
+
+// Parallax Effect for Project Images
+function initParallax() {
+    const parallaxImages = document.querySelectorAll('[data-parallax]');
+    if (parallaxImages.length === 0) return;
+    
+    // Store initial positions for each image
+    parallaxImages.forEach(img => {
+        const wrapper = img.parentElement;
+        const rect = wrapper.getBoundingClientRect();
+        img.dataset.initialTop = rect.top + window.scrollY;
+        img.dataset.wrapperHeight = rect.height;
+    });
+}
+
+function updateParallax() {
+    const parallaxImages = document.querySelectorAll('[data-parallax]');
+    if (parallaxImages.length === 0) return;
+    
+    const windowHeight = window.innerHeight;
+    const scrollY = window.scrollY || (lenis ? lenis.scroll : 0);
+    
+    parallaxImages.forEach(img => {
+        const wrapper = img.parentElement;
+        const rect = wrapper.getBoundingClientRect();
+        const wrapperTop = rect.top;
+        const wrapperHeight = rect.height;
+        
+        // Calculate if wrapper is in viewport
+        const wrapperBottom = wrapperTop + wrapperHeight;
+        const isInView = wrapperBottom > 0 && wrapperTop < windowHeight;
+        
+        if (isInView) {
+            // Parallax speed: 0.25 means image moves at 25% of scroll speed (slower)
+            const parallaxSpeed = 0.25;
+            
+            // Calculate how much the wrapper has scrolled relative to viewport center
+            const viewportCenter = windowHeight / 2;
+            const wrapperCenter = wrapperTop + wrapperHeight / 2;
+            const distanceFromCenter = wrapperCenter - viewportCenter;
+            
+            // Apply parallax offset (negative because we want image to move opposite to scroll)
+            const parallaxOffset = -distanceFromCenter * parallaxSpeed;
+            
+            // Apply transform directly for better performance
+            img.style.transform = `translateY(${parallaxOffset}px)`;
+        } else {
+            // Reset transform when out of view
+            img.style.transform = 'translateY(0)';
+        }
+    });
+}
+
+// Custom Cursor with Anime.js
+let cursorX = 0;
+let cursorY = 0;
+let cursorTargetX = 0;
+let cursorTargetY = 0;
+
+function initCustomCursor() {
+    const cursor = document.querySelector('.cursor');
+    if (!cursor) return;
+
+    // Hide cursor on mobile/touch devices
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+        cursor.style.display = 'none';
+        document.body.style.cursor = 'auto';
+        return;
+    }
+
+    // Initialize cursor position
+    cursorX = window.innerWidth / 2;
+    cursorY = window.innerHeight / 2;
+    cursorTargetX = cursorX;
+    cursorTargetY = cursorY;
+
+    // Track mouse position
+    document.addEventListener('mousemove', (e) => {
+        cursorTargetX = e.clientX;
+        cursorTargetY = e.clientY;
+    });
+
+    // Animate cursor to follow mouse with lag using Anime.js
+    let cursorAnimation = null;
+    
+    function updateCursor() {
+        // Calculate distance to target
+        const deltaX = cursorTargetX - cursorX;
+        const deltaY = cursorTargetY - cursorY;
+        
+        // Only animate if position has changed significantly
+        if (Math.abs(deltaX) > 0.5 || Math.abs(deltaY) > 0.5) {
+            if (cursorAnimation) cursorAnimation.pause();
+            
+            cursorAnimation = anime({
+                targets: { x: cursorX, y: cursorY },
+                x: cursorTargetX,
+                y: cursorTargetY,
+                duration: 800,
+                easing: 'easeOutExpo',
+                update: function(anim) {
+                    cursorX = anim.animatables[0].target.x;
+                    cursorY = anim.animatables[0].target.y;
+                    cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+                }
+            });
+        }
+        requestAnimationFrame(updateCursor);
+    }
+    updateCursor();
+
+    // Add hover effects on interactive elements
+    const interactiveElements = document.querySelectorAll('a, button, .cta-button, .project-card, .skill-item, .social-link, input, textarea');
+    
+    interactiveElements.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            cursor.classList.add('hover');
+        });
+        el.addEventListener('mouseleave', () => {
+            cursor.classList.remove('hover');
+        });
+    });
+}
+
 // Text Decoding Animation for Hero Title
 function animateHero() {
-    const heroTitle = document.querySelector('.hero h1');
+    const heroTitle = document.querySelector('.hero-title');
     if (!heroTitle) return;
 
     // Get the original text
@@ -176,6 +350,18 @@ function animateHero() {
 
 // Initialize animations when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Lenis smooth scroll
+    initLenis();
+    
+    // Initialize custom cursor
+    initCustomCursor();
+    
+    // Initialize parallax effect
+    initParallax();
+    
+    // Initialize local time clock
+    initLocalTime();
+    
     // Initialize 3D background
     init3DBackground();
 
@@ -206,9 +392,8 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         const heroTimeline = anime.timeline({ easing: 'easeOutExpo' });
         heroTimeline
-        .add({ targets: '.hero .subtitle', opacity: [0, 1], translateY: [50, 0], duration: 1000, delay: 200 })
-        .add({ targets: '.hero .description', opacity: [0, 1], translateY: [50, 0], duration: 1000, offset: '-=600' })
-        .add({ targets: '.cta-button', opacity: [0, 1], translateY: [50, 0], duration: 800, offset: '-=400' });
+        .add({ targets: '.hero-subtitle', opacity: [0, 1], translateY: [50, 0], duration: 1000, delay: 200 })
+        .add({ targets: '.hero-description', opacity: [0, 1], translateY: [50, 0], duration: 1000, offset: '-=600' });
     }, 1500);
 
     // Scroll-triggered animations
@@ -228,10 +413,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 if (target.matches('.skill-item')) {
                     anime({ targets: '.skill-item', opacity: [0, 1], translateY: [30, 0], duration: 800, delay: anime.stagger(100), easing: 'easeOutExpo' });
-                }/*
+                }
                 if (target.matches('.project-card')) {
-                    anime({ targets: '.project-card', opacity: [0, 1], translateY: [50, 0], duration: 1000, delay: anime.stagger(200), easing: 'easeOutExpo' });
-                }*/
+                    anime({ targets: target, opacity: [0, 1], translateY: [50, 0], duration: 1200, easing: 'easeOutExpo' });
+                }
                 if (target.matches('.social-link')) {
                     anime({ targets: '.social-link', opacity: [0, 1], scale: [0.5, 1], duration: 600, delay: anime.stagger(100), easing: 'easeOutBack' });
                 }
@@ -243,7 +428,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, observerOptions);
 
     // Observe all animatable elements
-    document.querySelectorAll('.section h2, .about-image, .about-text, .skill-item:first-child, .project-card:first-child, .social-link:first-child, .contact-form').forEach(el => {
+    document.querySelectorAll('.section h2, .about-image, .about-text, .skill-item:first-child, .project-card, .social-link:first-child, .contact-form').forEach(el => {
         observer.observe(el);
     });
 
@@ -283,17 +468,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add glitch effect on logo hover
     const logo = document.querySelector('.logo');
-    logo.addEventListener('mouseenter', () => { anime({ targets: logo, translateX: [0, -2, 2, 0], duration: 200, easing: 'easeInOutQuad' }); });
-
-    // Typewriter effect for hero subtitle
-    function typeWriter(element, text, speed = 100) {
-        let i = 0; element.innerHTML = '';
-        (function type() { if (i < text.length) { element.innerHTML += text.charAt(i); i++; setTimeout(type, speed); } })();
+    if (logo) {
+        logo.addEventListener('mouseenter', () => { anime({ targets: logo, translateX: [0, -2, 2, 0], duration: 200, easing: 'easeInOutQuad' }); });
     }
-    setTimeout(() => {
-        const subtitle = document.querySelector('.hero .subtitle');
-        typeWriter(subtitle, 'Software Developer', 150);
-    }, 2000);
 
     // Floating animation to skill items
     document.querySelectorAll('.skill-item').forEach((item, index) => {

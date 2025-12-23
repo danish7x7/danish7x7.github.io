@@ -1,31 +1,48 @@
 # Portfolio Project: Master Instructions
 
-## 1. Project Context
-* **Goal:** Refactor existing GitHub Pages skeleton into a high-performance "Futuristic AI" portfolio.
-* **Tech Stack:** HTML5, CSS3 (in `style.css`), JavaScript (in `script.js`), Anime.js (v3.2.1).
-* **Aesthetic:** "Cyber-Minimalism." Think: Data dashboards, sci-fi HUDs, clean lines, and deep dark backgrounds.
+## 1. Project Vision
+* **Goal:** A high-performance, interactive portfolio ("Awwwards" style).
+* **Inspiration:** "Her Project" portfolio (Smooth scrolling, custom cursor, fluid project transitions).
+* **Theme:** Futuristic AI/ML Enthusiast. Minimalist but motion-heavy.
+* **Tech Stack:**
+    * **Core:** HTML5, CSS3, JavaScript.
+    * **Motion:** Anime.js (General animations).
+    * **Scrolling:** Lenis (Essential for that "smooth" scroll feel).
+    * **3D (Optional):** Three.js (Only if we need a specific background blob/mesh).
 
-## 2. Design System (The "AI" Look)
-* **Color Palette:**
-    * Background: `#050505` (The Void - deeper than black).
-    * Card Surface: `#111111` (Slightly lighter).
-    * Text: `#E0E0E0` (Primary), `#888888` (Secondary/Dimmed).
-    * Accents: `#00FFC2` (Cyber Cyan) — used *only* for active states/cursors.
+## 2. Design System & Layout
+* **Cursor:** Custom circular cursor.
+    * *Behavior:* Follows mouse with a slight delay (magnetic feel).
+    * *State:* Expands or shows text ("View") when hovering over projects.
 * **Typography:**
-    * Headers: Monospaced font (`'JetBrains Mono'`, `'Fira Code'`, or `'Courier New'`) to simulate code.
-    * Body: Clean Sans-Serif (`'Inter'` or `'Arial'`).
-* **UI Elements:**
-    * 1px borders with low opacity (`rgba(255, 255, 255, 0.1)`).
-    * 0px border-radius (sharp edges) for a "machine" look.
+    * Headlines: Large, architectural Sans-Serif (e.g., 'Syncopate' or 'Space Grotesk').
+    * Details: Monospace (for the "AI/ML" vibe).
+* **Navigation:**
+    * *Top:* Minimal "Menu" button (triggers full-screen overlay).
+    * *Bottom:* "Let's Work Together" footer with dynamic Timezone (e.g., "Local time: 14:00 PM").
+* **Color Palette:**
+    * Deep Void (#050505) background.
+    * Text: Soft White (#EAEAEA).
+    * Accents: Subtle gradients or thin lines.
 
-## 3. Anime.js Integration Plan
-* **Library:** `<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>`
-* **Animation A (Hero):** "Decoding Text" effect. Letters scramble/type out on load.
-* **Animation B (Grid):** "Staggered Fade." Elements slide up and fade in with a delay.
-* **Animation C (Interactions):** Buttons/Links should have a "glitch" or rapid color shift on hover.
+## 3. Key Features Implementation
+### A. The "Liquid" Scroll (Lenis)
+* Use `@studio-freight/lenis` for the smooth scrolling effect.
+* Note: Anime.js animations must sync with this scroll position.
 
-## 4. Implementation Roadmap
-* [ ] **Step 0: Separation.** Extract CSS from `index.html` into `style.css`. Extract JS into `script.js`. Link them all correctly.
-* [ ] **Step 1: The Void (Design).** Apply the dark palette, monospace fonts, and sharp borders to the CSS.
-* [ ] **Step 2: Anime.js Setup.** Inject the CDN link and set up the `script.js` file.
-* [ ] **Step 3: The Motion.** Implement the "Decoding Text" and "Staggered Grid" animations.
+### B. The "Project Flow" (Gallery)
+* Layout: Large vertical cards with parallax images.
+* Interaction: As you scroll, images should scale slightly or move slower than the text (Parallax).
+* "View Project" Button: Appears or magnetizes to the cursor when hovering a card.
+
+### C. The Footer (Personal)
+* Large typography: "LET'S WORK TOGETHER".
+* Live Timezone Clock: JS function to show your local time.
+* Socials: Clean list.
+
+## 4. MVP Roadmap (Step-by-Step)
+* [ ] **Step 1: Setup Smooth Scroll.** Install/Link `Lenis` and initialize it in `script.js`.
+* [ ] **Step 2: Custom Cursor.** Create the HTML div for the cursor and write the Anime.js code to make it track the mouse with `easing: 'easeOutExpo'`.
+* [ ] **Step 3: Hero Section.** Build the "AI/ML Enthusiast" intro with large typography.
+* [ ] **Step 4: Project Gallery.** Create the HTML structure for project cards. Implement the "Parallax" effect using Anime.js on scroll.
+* [ ] **Step 5: Overlay Menu.** Build the full-screen menu that slides down when "Menu" is clicked.
