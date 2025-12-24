@@ -6,13 +6,6 @@
     <title>Danishbir Singh - Portfolio</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/Draggable.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/Flip.min.js" defer></script>
-
-    <!-- NEW: Tilt library -->
-    <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.1/dist/vanilla-tilt.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -29,7 +22,7 @@
             <div class="logo">Danishbir Singh</div>
             <ul class="nav-links nav-center">
                 <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
+                <li><a href="#project">Project</a></li>
             </ul>
             <a href="#contact" class="nav-contact">
                 <span>Contact</span>
@@ -46,7 +39,7 @@
             </div>
             <div class="hero-right">
                 <div class="hero-image-container">
-                    <img src="profile.png" alt="Danishbir Singh" class="hero-profile-image">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=800&fit=crop" alt="Danishbir Singh" class="hero-profile-image">
                     <div class="hologram-scanline"></div>
                 </div>
             </div>
@@ -101,78 +94,38 @@
         </div>
     </section>
 
-    <!-- Projects Gallery Section -->
-    <section id="projects" class="projects-gallery">
-        <div class="project-card">
+    <!-- Featured Project Section -->
+    <section id="project" class="featured-project">
+        <h2>Featured Project</h2>
+        <div class="project-showcase">
             <div class="project-image-wrapper">
-                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop" alt="E-Commerce Platform" class="project-image" data-parallax>
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop" alt="E-Commerce Platform" class="project-image">
             </div>
-            <div class="project-content">
+            <div class="project-details">
                 <h3 class="project-title">E-Commerce Platform</h3>
-                <p class="project-description">A full-stack e-commerce solution with modern payment integration and inventory management.</p>
-                <a href="https://github.com/danish7x7/ecommerce-platform" class="project-link" target="_blank">View Project →</a>
-            </div>
-        </div>
-
-        <div class="project-card">
-            <div class="project-image-wrapper">
-                <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=1200&h=800&fit=crop" alt="Task Manager" class="project-image" data-parallax>
-            </div>
-            <div class="project-content">
-                <h3 class="project-title">Task Manager</h3>
-                <p class="project-description">A collaborative task management application with real-time updates and team collaboration features.</p>
-                <a href="https://github.com/danish7x7/task-manager" class="project-link" target="_blank">View Project →</a>
-            </div>
-        </div>
-
-        <div class="project-card">
-            <div class="project-image-wrapper">
-                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=800&fit=crop" alt="Weather Dashboard" class="project-image" data-parallax>
-            </div>
-            <div class="project-content">
-                <h3 class="project-title">Weather Dashboard</h3>
-                <p class="project-description">An interactive weather visualization dashboard with forecast predictions and location-based data.</p>
-                <a href="https://github.com/danish7x7/weather-dashboard" class="project-link" target="_blank">View Project →</a>
-            </div>
-        </div>
-
-        <div class="project-card">
-            <div class="project-image-wrapper">
-                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop" alt="Marketplace Analytics" class="project-image" data-parallax>
-            </div>
-            <div class="project-content">
-                <h3 class="project-title">Marketplace Analytics</h3>
-                <p class="project-description">Advanced analytics platform for marketplace data visualization and business intelligence.</p>
-                <a href="https://github.com/danish7x7/marketplace-analytics" class="project-link" target="_blank">View Project →</a>
-            </div>
-        </div>
-
-        <div class="project-card">
-            <div class="project-image-wrapper">
-                <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?w=1200&h=800&fit=crop" alt="Bug Bite Detection" class="project-image" data-parallax>
-            </div>
-            <div class="project-content">
-                <h3 class="project-title">Bug Bite Detection</h3>
-                <p class="project-description">AI-powered mobile application for identifying insect bites using machine learning and image recognition.</p>
-                <a href="https://github.com/danish7x7/bug-bite-detection" class="project-link" target="_blank">View Project →</a>
-            </div>
-        </div>
-
-        <div class="project-card">
-            <div class="project-image-wrapper">
-                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop" alt="Addiction Analysis" class="project-image" data-parallax>
-            </div>
-            <div class="project-content">
-                <h3 class="project-title">Addiction Analysis</h3>
-                <p class="project-description">Data-driven analysis tool for understanding patterns and trends in behavioral data.</p>
-                <a href="https://github.com/danish7x7/addiction-analysis" class="project-link" target="_blank">View Project →</a>
+                <p class="project-description">
+                    A full-stack e-commerce solution with modern payment integration, 
+                    real-time inventory management, and seamless user experience. 
+                    Built with cutting-edge technologies to deliver high performance 
+                    and scalability.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">React</span>
+                    <span class="tech-tag">Node.js</span>
+                    <span class="tech-tag">MongoDB</span>
+                    <span class="tech-tag">Stripe API</span>
+                    <span class="tech-tag">AWS</span>
+                </div>
+                <a href="https://github.com/danish7x7/ecommerce-platform" class="project-link" target="_blank">
+                    <span>View on GitHub</span>
+                    <span>→</span>
+                </a>
             </div>
         </div>
     </section>
 
-
     <!-- Footer -->
-    <footer class="footer">
+    <footer id="contact" class="footer">
         <div class="footer-content">
             <h2 class="footer-title">LET'S CONNECT</h2>
             <div class="footer-info">
@@ -198,8 +151,6 @@
     <!-- Custom Cursor -->
     <div class="cursor"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
