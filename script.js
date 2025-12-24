@@ -143,7 +143,10 @@ function initLenis() {
             requestAnimationFrame(raf);
         }
         requestAnimationFrame(raf);
+        
+        return lenis;
     }
+    return null;
 }
 
 // Local Time Clock
@@ -294,64 +297,87 @@ function initCustomCursor() {
     });
 }
 
-// Text Decoding Animation for Hero Title
+// Text Decoding Animation for Hero Title (Terminal Decode)
 function animateHero() {
     const heroTitle = document.querySelector('.hero-title');
     if (!heroTitle) return;
 
     // Get the original text
-    const originalText = heroTitle.textContent;
+    const originalText = heroTitle.textContent.trim();
+    
+    // Characters for scrambling (alphanumeric + symbols)
+    const scrambleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()[]{}|;:,.<>?';
     
     // Split text into characters (including spaces)
     const characters = originalText.split('');
     
     // Clear the original text and wrap each character in a span
     heroTitle.innerHTML = '';
+    const charSpans = [];
+    
     characters.forEach((char, index) => {
         const span = document.createElement('span');
-        span.textContent = char === ' ' ? '\u00A0' : char; // Use non-breaking space for actual spaces
+        // Start with a random scramble character
+        span.textContent = char === ' ' ? '\u00A0' : scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
         span.style.display = 'inline-block';
-        span.style.opacity = '0';
+        span.style.fontFamily = 'JetBrains Mono, monospace'; // Monospaced font for scrambling
+        span.style.opacity = '1';
+        span.dataset.finalChar = char === ' ' ? '\u00A0' : char;
         heroTitle.appendChild(span);
+        charSpans.push(span);
     });
 
-    // Get all character spans
-    const charSpans = heroTitle.querySelectorAll('span');
-
-    // Create decoding animation - each character scrambles then settles
-    anime({
-        targets: charSpans,
-        opacity: [
-            { value: 0, duration: 0 },
-            { value: [0.3, 0.7], duration: 200, easing: 'easeInOutQuad' },
-            { value: [0.5, 1], duration: 300, easing: 'easeInOutQuad' },
-            { value: 1, duration: 400, easing: 'easeOutQuad' }
-        ],
-        translateY: [
-            { value: [0, -30], duration: 200, easing: 'easeInOutQuad' },
-            { value: [10, -10], duration: 300, easing: 'easeInOutQuad' },
-            { value: 0, duration: 400, easing: 'easeOutQuad' }
-        ],
-        translateX: [
-            { value: () => anime.random(-20, 20), duration: 200, easing: 'easeInOutQuad' },
-            { value: () => anime.random(-10, 10), duration: 300, easing: 'easeInOutQuad' },
-            { value: 0, duration: 400, easing: 'easeOutQuad' }
-        ],
-        delay: anime.stagger(50, { start: 300 }),
-        complete: function() {
-            // Ensure all characters are fully visible and in final position
+    // Scramble phase: Random characters cycling
+    let scrambleCount = 0;
+    const maxScrambles = 15; // Number of scramble iterations
+    const scrambleInterval = setInterval(() => {
+        charSpans.forEach((span, index) => {
+            const finalChar = span.dataset.finalChar;
+            if (finalChar !== '\u00A0') { // Don't scramble spaces
+                // Gradually reveal correct character (more correct chars as we progress)
+                const progress = scrambleCount / maxScrambles;
+                if (Math.random() > progress) {
+                    span.textContent = scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+                } else {
+                    span.textContent = finalChar;
+                }
+            }
+        });
+        scrambleCount++;
+        
+        if (scrambleCount >= maxScrambles) {
+            clearInterval(scrambleInterval);
+            
+            // Final reveal: Set all to correct characters
             charSpans.forEach(span => {
-                span.style.opacity = '1';
-                span.style.transform = 'translate(0, 0)';
+                span.textContent = span.dataset.finalChar;
             });
+            
+            // Switch back to original font and animate final reveal
+            setTimeout(() => {
+                charSpans.forEach(span => {
+                    span.style.fontFamily = ''; // Reset to inherit from .hero-title
+                });
+                
+                // Final animation: characters settle into place
+                anime({
+                    targets: charSpans,
+                    opacity: [0.5, 1],
+                    translateY: [10, 0],
+                    scale: [0.9, 1],
+                    duration: 600,
+                    delay: anime.stagger(30),
+                    easing: 'easeOutExpo'
+                });
+            }, 100);
         }
-    });
+    }, 80); // Scramble every 80ms
 }
 
 // Initialize animations when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize Lenis smooth scroll
-    initLenis();
+    lenis = initLenis();
     
     // Initialize custom cursor
     initCustomCursor();
@@ -384,9 +410,29 @@ document.addEventListener('DOMContentLoaded', function() {
         delay: anime.stagger(100, { start: 700 }),
         easing: 'easeOutExpo'
     });
+    
+    // Animate contact link
+    anime({
+        targets: '.nav-contact',
+        opacity: [0, 1],
+        translateY: [-20, 0],
+        duration: 800,
+        delay: 900,
+        easing: 'easeOutExpo'
+    });
 
     // Animate hero section with text decoding effect
     animateHero();
+    
+    // Animate hero image container
+    anime({
+        targets: '.hero-image-container',
+        opacity: [0, 0.85],
+        scale: [0.9, 1],
+        duration: 1500,
+        delay: 2000,
+        easing: 'easeOutExpo'
+    });
 
     // Animate other hero elements after title decoding
     setTimeout(() => {
@@ -441,11 +487,60 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Navbar scroll effect
-    window.addEventListener('scroll', () => {
+    // Smart Navbar: Hide on scroll down, show on scroll up
+    let lastScrollY = lenis ? lenis.scroll : window.scrollY;
+    let ticking = false;
+    
+    function updateNavbar() {
         const navbar = document.getElementById('navbar');
-        if (window.scrollY > 50) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled');
-    });
+        if (!navbar) return;
+        
+        const currentScrollY = lenis ? lenis.scroll : window.scrollY;
+        const scrollDifference = currentScrollY - lastScrollY;
+        
+        // Only hide/show if scroll difference is significant (more than 5px)
+        if (Math.abs(scrollDifference) > 5) {
+            if (scrollDifference > 0 && currentScrollY > 100) {
+                // Scrolling DOWN - hide navbar
+                navbar.style.transform = 'translateY(-100%)';
+            } else {
+                // Scrolling UP - show navbar
+                navbar.style.transform = 'translateY(0)';
+            }
+        }
+        
+        // Update scrolled class for styling
+        if (currentScrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+        
+        lastScrollY = currentScrollY;
+        ticking = false;
+    }
+    
+    function onScroll() {
+        if (!ticking) {
+            window.requestAnimationFrame(updateNavbar);
+            ticking = true;
+        }
+    }
+    
+    // Use Lenis scroll event if available, otherwise use window scroll
+    if (lenis) {
+        lenis.on('scroll', ({ scroll, limit, velocity, direction }) => {
+            onScroll();
+        });
+    } else {
+        window.addEventListener('scroll', onScroll, { passive: true });
+    }
+    
+    // Initialize navbar position
+    const navbar = document.getElementById('navbar');
+    if (navbar) {
+        navbar.style.transform = 'translateY(0)';
+    }
 
     // Form submission
     document.getElementById('contactForm').addEventListener('submit', function(e) {

@@ -1,48 +1,66 @@
 # Portfolio Project: Master Instructions
 
 ## 1. Project Vision
-* **Goal:** A high-performance, interactive portfolio ("Awwwards" style).
-* **Inspiration:** "Her Project" portfolio (Smooth scrolling, custom cursor, fluid project transitions).
-* **Theme:** Futuristic AI/ML Enthusiast. Minimalist but motion-heavy.
-* **Tech Stack:**
-    * **Core:** HTML5, CSS3, JavaScript.
-    * **Motion:** Anime.js (General animations).
-    * **Scrolling:** Lenis (Essential for that "smooth" scroll feel).
-    * **3D (Optional):** Three.js (Only if we need a specific background blob/mesh).
+* **Goal:** A high-performance, multi-page portfolio with "Liquid Motion" physics.
+* **Theme:** "Futuristic AI/ML Enthusiast" (Cyber-Minimalism).
+* **Inspiration:** Bettina Sosa (Nav/Motion) + Anime.js (Data Visualization).
+* **Tech Stack:** HTML5, CSS3, JavaScript, Anime.js (v3.2.1), Lenis (Smooth Scroll).
 
-## 2. Design System & Layout
-* **Cursor:** Custom circular cursor.
-    * *Behavior:* Follows mouse with a slight delay (magnetic feel).
-    * *State:* Expands or shows text ("View") when hovering over projects.
+## 2. Site Architecture
+* `index.html` (Main Landing - 4 Sections)
+* `about.html` (Resume, Hobbies, Playlist)
+* `projects.html` (Full Gallery)
+* `contact.html` (Direct Links)
+* `style.css` (Global Variables & Styles)
+* `script.js` (Global Animation Logic)
+
+## 3. Design System (The "Void" Look)
+* **Colors:**
+    * Background: `#050505` (Deep Void).
+    * Text: `#E0E0E0` (Primary), `#888888` (Secondary).
+    * Accents: `#00F0FF` (Cyan Hologram Glow) & `#FF3366` (Interaction Red).
 * **Typography:**
-    * Headlines: Large, architectural Sans-Serif (e.g., 'Syncopate' or 'Space Grotesk').
-    * Details: Monospace (for the "AI/ML" vibe).
-* **Navigation:**
-    * *Top:* Minimal "Menu" button (triggers full-screen overlay).
-    * *Bottom:* "Let's Work Together" footer with dynamic Timezone (e.g., "Local time: 14:00 PM").
-* **Color Palette:**
-    * Deep Void (#050505) background.
-    * Text: Soft White (#EAEAEA).
-    * Accents: Subtle gradients or thin lines.
+    * **Hero/Headlines:** 'Syncopate' or 'Space Grotesk' (Bold, Architectural).
+    * **Data/Body:** 'JetBrains Mono' or 'Fira Code' (The Developer/AI aesthetic).
+* **Motion Physics:**
+    * **Scroll:** Continuous "Liquid" feeling using Lenis.
+    * **Cursor:** Magnetic circle with a slight drag delay.
 
-## 3. Key Features Implementation
-### A. The "Liquid" Scroll (Lenis)
-* Use `@studio-freight/lenis` for the smooth scrolling effect.
-* Note: Anime.js animations must sync with this scroll position.
+## 4. Homepage Sections (Detailed Specs)
+### Section 1: The Hero (Interactive Interface)
+* **Navbar (Bettina Style):**
+    * Layout: Logo (Left), Links (Center), Contact (Right).
+    * **Interaction:** "The Micro-Nudge." Hovering a link moves it 2px diagonally `transform: translate(2px, -2px)`.
+    * **Smart Visibility:** Hides when scrolling down, reappears when scrolling up.
+* **Hero Content:**
+    * **Left (Text):** Massive (8vw), bold text defining you in 4-5 words (e.g., "ARCHITECTING FUTURE INTELLIGENCE").
+    * **Right (Visual):** Profile Photo treated as a **"Hologram"** (Scanline overlay, cyan glow, floating animation).
+* **Entrance:** "Terminal Decode." Main text scrambles characters `[_H_e_l...]` -> `[Hello]` on load.
 
-### B. The "Project Flow" (Gallery)
-* Layout: Large vertical cards with parallax images.
-* Interaction: As you scroll, images should scale slightly or move slower than the text (Parallax).
-* "View Project" Button: Appears or magnetizes to the cursor when hovering a card.
+### Section 2: Skills Matrix (The "Data Grid")
+* **Layout:** Clean grid of icons/text.
+* **Interaction:** "Ripple Stagger." Hovering one item expands it; moving mouse across the grid creates a trail of light (domino effect).
 
-### C. The Footer (Personal)
-* Large typography: "LET'S WORK TOGETHER".
-* Live Timezone Clock: JS function to show your local time.
-* Socials: Clean list.
+### Section 3: The Spotlight (One Project)
+* **Content:** "Travel AI Companion App" ONLY.
+* **Layout:** Full-width immersive card.
+* **Parallax:** Background image moves slower than the scroll speed.
 
-## 4. MVP Roadmap (Step-by-Step)
-* [ ] **Step 1: Setup Smooth Scroll.** Install/Link `Lenis` and initialize it in `script.js`.
-* [ ] **Step 2: Custom Cursor.** Create the HTML div for the cursor and write the Anime.js code to make it track the mouse with `easing: 'easeOutExpo'`.
-* [ ] **Step 3: Hero Section.** Build the "AI/ML Enthusiast" intro with large typography.
-* [ ] **Step 4: Project Gallery.** Create the HTML structure for project cards. Implement the "Parallax" effect using Anime.js on scroll.
-* [ ] **Step 5: Overlay Menu.** Build the full-screen menu that slides down when "Menu" is clicked.
+### Section 4: The Footer (Connection)
+* **Headline:** "LET'S CONNECT" (Massive).
+* **Meta Data:** Live Local Timezone clock + "AI/ML Enthusiast" tagline.
+* **Socials:** Minimal list.
+
+## 5. Subpage Specifications
+* **About Page:**
+    * **Resume:** "Download CV" button with glitch hover effect.
+    * **Hobbies:** Grid cards (Pokemon Go, Cooking, Art).
+    * **Music:** Minimalist playlist embed.
+* **Projects Page:** Full gallery of remaining work.
+
+## 6. Implementation Roadmap
+* [ ] **Step 1: Structural Setup.** Create files, link Anime.js + Lenis CDN, apply Global CSS Variables.
+* [ ] **Step 2: The Engine.** Initialize Lenis (Smooth Scroll) and the Magnetic Cursor in `script.js`.
+* [ ] **Step 3: Section 1 (Hero).** Build the Split Grid, Hologram CSS, and Terminal Decode animation.
+* [ ] **Step 4: Section 2 & 3 (Skills & Project).** Implement the "Ripple Grid" and Parallax Spotlight.
+* [ ] **Step 5: Subpages.** Build the About/Hobbies layouts.
