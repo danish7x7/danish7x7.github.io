@@ -42,7 +42,7 @@ export default function Home() {
               DEV
             </h1>
             <p className="font-mono text-xl text-gray-300 leading-relaxed">
-              Full-Stack Developer & AI/ML Enthusiast
+              Software Developer & AI/ML Enthusiast
             </p>
             <p className="font-mono text-sm text-gray-400 max-w-md">
               Crafting pixel-perfect experiences with cutting-edge technology.
@@ -66,7 +66,7 @@ export default function Home() {
 
           {/* Right: Hologram */}
           <div className="flex justify-center">
-            <Hologram imageSrc="/me.png" size={320} />
+            <Hologram imageSrc="/me.png" size={420} />
           </div>
         </div>
 

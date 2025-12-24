@@ -18,7 +18,7 @@ const spaceMono = Space_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Cyber-Retro Portfolio',
+  title: 'Danish Portfolio',
   description: 'A high-performance portfolio with pixel art and holographic effects',
 }
 
