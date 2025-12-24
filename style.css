@@ -12,25 +12,30 @@
 /* Custom Cursor */
 .cursor {
     position: fixed;
-    width: 40px;
-    height: 40px;
-    border: 2px solid #00FFC2;
+    width: 30px;
+    height: 30px;
+    border: 3px solid #00FFC2;
     border-radius: 50%;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 10000;
     left: 0;
     top: 0;
     transform: translate(-50%, -50%);
-    transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
-    opacity: 0.8;
+    transition: width 0.3s ease, height 0.3s ease, background 0.3s ease;
+    background: transparent;
+    box-shadow: 0 0 10px rgba(0, 255, 194, 0.5), 
+                0 0 20px rgba(0, 255, 194, 0.3),
+                inset 0 0 10px rgba(0, 255, 194, 0.2);
     will-change: transform;
 }
 
 .cursor.hover {
-    width: 60px;
-    height: 60px;
-    opacity: 1;
-    background: rgba(0, 255, 194, 0.1);
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 255, 194, 0.15);
+    border-color: #00FFFF;
+    box-shadow: 0 0 20px rgba(0, 255, 194, 0.8), 
+                0 0 40px rgba(0, 255, 194, 0.4);
 }
 
 /* Typography */
@@ -40,11 +45,13 @@ body {
     color: #E0E0E0;
     overflow-x: hidden;
     line-height: 1.6;
-    cursor: none;
 }
 
-a, button, .interactive {
-    cursor: none;
+/* Force cursor none on desktop only */
+@media (hover: hover) and (pointer: fine) {
+    body, a, button, .interactive {
+        cursor: none !important;
+    }
 }
 
 h1, h2, h3, h4, h5, h6 {
