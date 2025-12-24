@@ -89,3 +89,46 @@ body {
                  0 0 80px rgba(255, 0, 110, 0.3);
   }
 }
+
+/* Page Transition Animations */
+.page-transition-wrapper {
+  width: 100%;
+  min-height: 100%;
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+.page-transition-enter {
+  animation: pageEnter 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.page-transition-exit {
+  animation: pageExit 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes pageExit {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+}
+
+@keyframes pageEnter {
+  0% {
+    transform: scale(1.04);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Smooth transition for all page content */
+main {
+  transition: opacity 0.2s ease-in-out;
+}
