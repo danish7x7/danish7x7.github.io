@@ -54,7 +54,6 @@ export default function PokemonCard({ title, description, icon }: PokemonCardPro
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        {/* Card container with pixelated border */}
         <div
           className={`w-full h-full bg-gradient-to-br from-cyber-dark via-cyber-black to-cyber-dark rounded-lg overflow-hidden transition-all duration-300 ${
             isHovered
@@ -67,7 +66,6 @@ export default function PokemonCard({ title, description, icon }: PokemonCardPro
             imageRendering: 'pixelated',
           }}
         >
-          {/* Holographic shine effect */}
           <div
             className={`absolute inset-0 bg-gradient-to-br from-neon-blue/30 via-transparent to-neon-pink/30 mix-blend-overlay transition-opacity duration-300 ${
               isHovered ? 'opacity-100' : 'opacity-50'
@@ -77,9 +75,7 @@ export default function PokemonCard({ title, description, icon }: PokemonCardPro
             }}
           />
 
-          {/* Card content */}
           <div className="relative z-10 p-6 h-full flex flex-col items-center justify-between">
-            {/* Top section: Icon */}
             <div className="w-full flex justify-center items-center flex-1">
               <div className={`text-8xl transition-transform duration-300 ${
                 isHovered ? 'scale-110' : 'scale-100'
@@ -88,7 +84,6 @@ export default function PokemonCard({ title, description, icon }: PokemonCardPro
               </div>
             </div>
 
-            {/* Bottom section: Text */}
             <div className="w-full text-center space-y-3 pb-4">
               <h3 className="font-pixel text-neon-blue text-sm tracking-wider">
                 {title}
@@ -98,14 +93,12 @@ export default function PokemonCard({ title, description, icon }: PokemonCardPro
               </p>
             </div>
 
-            {/* Pixel decorations */}
             <div className="absolute top-4 left-4 w-3 h-3 bg-neon-green"></div>
             <div className="absolute top-4 right-4 w-3 h-3 bg-neon-pink"></div>
             <div className="absolute bottom-4 left-4 w-3 h-3 bg-neon-purple"></div>
             <div className="absolute bottom-4 right-4 w-3 h-3 bg-neon-yellow"></div>
           </div>
 
-          {/* Scan lines effect */}
           <div className="absolute inset-0 pointer-events-none opacity-10">
             {[...Array(30)].map((_, i) => (
               <div

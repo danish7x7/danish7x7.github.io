@@ -12,7 +12,7 @@ export default function Hologram({ imageSrc, size = 300 }: HologramProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [pixelData, setPixelData] = useState<ImageData | null>(null)
-  const [gridSize] = useState(8) // Size of each pixel block
+  const [gridSize] = useState(8)
   const animationRef = useRef<anime.AnimeInstance | null>(null)
 
   useEffect(() => {
@@ -29,7 +29,6 @@ export default function Hologram({ imageSrc, size = 300 }: HologramProps) {
       canvas.height = size
       ctx.imageSmoothingEnabled = false
       
-      // Draw pixelated image
       const tempCanvas = document.createElement('canvas')
       const tempCtx = tempCanvas.getContext('2d')
       if (!tempCtx) return
@@ -49,7 +48,6 @@ export default function Hologram({ imageSrc, size = 300 }: HologramProps) {
     }
 
     img.onerror = () => {
-      // Fallback: create a gradient if image fails to load
       const gradient = ctx.createLinearGradient(0, 0, size, size)
       gradient.addColorStop(0, '#00f0ff')
       gradient.addColorStop(0.5, '#ff006e')
@@ -149,13 +147,11 @@ export default function Hologram({ imageSrc, size = 300 }: HologramProps) {
       >
         {pixelData && renderPixelGrid()}
         
-        {/* Holographic overlay effects */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-br from-neon-blue/20 via-transparent to-neon-pink/20 mix-blend-overlay"></div>
           <div className="absolute inset-0 bg-gradient-to-tl from-neon-green/10 via-transparent to-neon-purple/10 mix-blend-overlay animate-pulse-glow"></div>
         </div>
         
-        {/* Scan lines */}
         <div className="absolute inset-0 pointer-events-none opacity-20">
           {[...Array(20)].map((_, i) => (
             <div
