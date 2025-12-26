@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import Hologram from '@/components/Hologram'
+import Hologram from '@/components/Hologram' // Make sure this path matches your folder structure
 import { Github, ExternalLink, ArrowRight, Sparkles } from 'lucide-react'
 import { useScrollAnimation } from '@/hooks/useScrollAnimation'
 import { useEffect, useRef } from 'react'
@@ -22,7 +22,7 @@ export default function Home() {
     demo: 'https://demo.example.com',
   }
 
-  // Anime.js for floating particles
+  // Anime.js for floating background particles
   const particlesRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center justify-center relative px-6">
+      <section className="min-h-screen flex items-center justify-center relative px-6 py-20 md:py-0">
         {/* Refined Grid Background */}
         <div className="absolute inset-0 refined-grid opacity-20"></div>
         
@@ -171,9 +171,12 @@ export default function Home() {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="flex justify-center"
+            className="flex justify-center items-center h-full"
           >
-            <Hologram imageSrc="/me.png" size={420} />
+            {/* IMPORTANT: Ensure 'me.png' is in your /public folder.
+                The Hologram component now handles the glow and floating.
+            */}
+            <Hologram imageSrc="/me.png" size={450} />
           </motion.div>
         </div>
 
