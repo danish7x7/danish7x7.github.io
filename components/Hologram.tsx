@@ -27,8 +27,8 @@ export default function Hologram({ imageSrc, size = 300 }: HologramProps) {
         }}
         style={{
           // THIS IS THE FIX: It fades the edges of the box so you don't see a square
-          WebkitMaskImage: 'radial-gradient(circle at center, black 25%, transparent 100%)',
-          maskImage: 'radial-gradient(circle at center, black 25%, transparent 100%)'
+          WebkitMaskImage: 'radial-gradient(circle at center, black 5%, transparent 100%)',
+          maskImage: 'radial-gradient(circle at center, black 5%, transparent 100%)'
         }}
       >
         <img
