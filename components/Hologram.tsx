@@ -18,17 +18,11 @@ export default function Hologram({ imageSrc, size = 300 }: HologramProps) {
         initial={{ y: 0 }}
         animate={{ 
           y: [-15, 15, -15], // Floating movement
-          opacity: [0.9, 1, 0.9] // Subtle pulsing
         }}
         transition={{ 
           duration: 4, 
           repeat: Infinity, 
           ease: "easeInOut" 
-        }}
-        style={{
-          // THIS IS THE FIX: It fades the edges of the box so you don't see a square
-          WebkitMaskImage: 'radial-gradient(circle at center, black 5%, transparent 100%)',
-          maskImage: 'radial-gradient(circle at center, black 5%, transparent 100%)'
         }}
       >
         <img
@@ -36,23 +30,18 @@ export default function Hologram({ imageSrc, size = 300 }: HologramProps) {
           alt="Hologram"
           className="w-full h-full object-contain"
           style={{
-            // "Screen" makes the black background transparent and the colors glow
+            // "screen" blend mode hides the black background pixels
             mixBlendMode: 'screen', 
-            filter: 'drop-shadow(0 0 15px rgba(0, 240, 255, 0.7)) drop-shadow(5px 5px 30px rgba(255, 0, 110, 0.5)) brightness(1.2)',
+            // We removed drop-shadow to stop the "square glow" effect.
+            // Brightness(1.2) makes the internal neon colors pop more.
+            filter: 'brightness(1.2)', 
           }}
         />
         
-        {/* Holographic Overlay / Scanlines Effect */}
-        <div 
-          className="absolute inset-0 pointer-events-none mix-blend-overlay"
-          style={{
-            background: 'linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0, 255, 255, 0.1) 50%), linear-gradient(90deg, rgba(255,0,0,0.06), rgba(0,255,0,0.02), rgba(0,0,255,0.06))',
-            backgroundSize: '100% 4px, 3px 100%',
-          }}
-        />
+        {/* I have REMOVED the scanlines div from here completely */}
       </motion.div>
 
-      {/* Floor Glow Reflection */}
+      {/* Optional: Simple floor reflection (Remove if you want zero extra effects) */}
       <div 
         className="absolute bottom-0 w-3/4 h-4 bg-neon-blue blur-xl opacity-30 rounded-[100%]"
       />
