@@ -25,13 +25,19 @@ export default function Hologram({ imageSrc, size = 300 }: HologramProps) {
           repeat: Infinity, 
           ease: "easeInOut" 
         }}
+        style={{
+          // THIS IS THE FIX: It fades the edges of the box so you don't see a square
+          WebkitMaskImage: 'radial-gradient(circle at center, black 50%, transparent 100%)',
+          maskImage: 'radial-gradient(circle at center, black 50%, transparent 100%)'
+        }}
       >
         <img
           src={imageSrc}
           alt="Hologram"
           className="w-full h-full object-contain"
           style={{
-            // This creates the Blue & Pink retro glow
+            // "Screen" makes the black background transparent and the colors glow
+            mixBlendMode: 'screen', 
             filter: 'drop-shadow(0 0 15px rgba(0, 240, 255, 0.7)) drop-shadow(5px 5px 30px rgba(255, 0, 110, 0.5)) brightness(1.2)',
           }}
         />
