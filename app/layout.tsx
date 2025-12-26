@@ -3,6 +3,8 @@ import { Orbitron, Space_Mono } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import { ReactNode } from 'react'
+import PageTransition from '@/components/PageTransition'
 
 const orbitron = Orbitron({
   subsets: ['latin'],
@@ -22,24 +24,17 @@ export const metadata: Metadata = {
   description: 'A high-performance portfolio with pixel art and holographic effects',
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en">
       <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-          rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
       </head>
-      <body
-        className={`${orbitron.variable} ${spaceMono.variable} bg-cyber-black text-white antialiased min-h-screen`}
-      >
+      <body className={`${orbitron.variable} ${spaceMono.variable} bg-cyber-black text-white antialiased`}>
         <Navbar />
-        <main className="pt-20">{children}</main>
+        <PageTransition>
+          <main className="pt-20">{children}</main>
+        </PageTransition>
         <Footer />
       </body>
     </html>
