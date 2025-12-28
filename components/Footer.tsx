@@ -70,7 +70,7 @@ export default function Footer() {
           {/* Right: Summary */}
           <div className="flex flex-col items-center md:items-end">
             <p className="font-cyber text-neon-green text-sm tracking-wider">
-              AI/ML ENTHUSIAST
+              AI/ML SOFTWARE ENTHUSIAST
             </p>
             <p className="font-mono text-xs text-gray-500 mt-1">
               Building the future, one pixel at a time
@@ -81,7 +81,7 @@ export default function Footer() {
         {/* Copyright */}
         <div className="mt-8 pt-6 border-t border-neon-blue/10">
           <p className="text-center font-mono text-xs text-gray-600">
-            © {new Date().getFullYear()} Cyber-Retro Portfolio. All rights reserved.
+            © {new Date().getFullYear()} Danish Portfolio. All rights reserved.
           </p>
         </div>
       </div>

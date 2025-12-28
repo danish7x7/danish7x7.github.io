@@ -14,12 +14,12 @@ export default function About() {
   ]
 
   const quickFacts = [
-    { label: 'Favorite Language', value: 'TypeScript', icon: Code },
+    { label: 'Favorite Language', value: 'Python', icon: Code },
     { label: 'Coffee Per Day', value: '∞ cups', icon: Palette },
-    { label: 'Favorite IDE', value: 'VS Code + Vim', icon: Code },
+    { label: 'Favorite IDE', value: 'Cursor + Windsurf', icon: Code },
     { label: 'Hours Coding', value: '10,000+', icon: Cpu },
-    { label: 'GitHub Streak', value: '365 days', icon: Code },
-    { label: 'Favorite Framework', value: 'Next.js', icon: Palette },
+    { label: 'GitHub Streak', value: '5 days', icon: Code },
+    { label: 'Favorite Framework', value: '', icon: Palette },
   ]
 
   return (
@@ -90,18 +90,18 @@ function BioCard() {
       <div className="absolute inset-0 bg-gradient-to-br from-neon-blue/20 via-neon-purple/20 to-neon-pink/20 blur-3xl"></div>
       <div className="relative glass-morphism rounded-2xl p-8 md:p-12 border border-white/10">
         <h2 className="font-cyber text-3xl text-gradient-blue mb-6">
-          Hi, I'm [Your Name] 👋
+          Hi, I'm Danishbir Singh Bhatti 👋
         </h2>
         <div className="space-y-4 font-mono text-gray-300 text-lg leading-relaxed">
           <p>
-            I'm a full-stack developer and AI/ML enthusiast passionate about building
-            innovative solutions that push the boundaries of what's possible with technology.
+            I’m a software engineer and data-driven problem solver passionate about AI, machine learning, and cloud-native development. 
+            With hands-on experience in Python, React, SQL, and AWS, I build scalable solutions that bridge technology with user impact.
             My journey started with a fascination for how computers think, and it's evolved
             into a career dedicated to making intelligent systems more accessible and useful.
           </p>
           <p>
             When I'm not coding, you'll find me exploring virtual worlds, hunting for
-            rare Pokémon cards, or listening to synthwave while brainstorming my next project.
+            rare Pokémons, or listening to R&B while brainstorming my next project.
             I believe the best work happens at the intersection of creativity and logic.
           </p>
           <p>
@@ -227,7 +227,7 @@ function HobbiesSection() {
       <div className="flex flex-wrap justify-center gap-8">
         <PokemonCard
           title="Pokemon Go"
-          description="Level 45 Trainer. Catching 'em all across the city. Team Mystic for life! Current goal: Complete Shiny Dex."
+          description="Level 60 Trainer. Catching 'em all across the city. Team Valor for life! Current goal: Complete Shiny Dex."
           icon="🎮"
         />
         <PokemonCard
@@ -236,8 +236,8 @@ function HobbiesSection() {
           icon="🃏"
         />
         <PokemonCard
-          title="Synthwave Music"
-          description="Obsessed with retro-futuristic soundscapes. Always coding with neon beats in the background. Favorite artists: Carpenter Brut, Perturbator."
+          title="R&B Music"
+          description="Obsessed with retro-futuristic soundscapes. Always coding with neon beats in the background. Favorite artists: The Weeknd & Don Toliver."
           icon="🎵"
         />
       </div>

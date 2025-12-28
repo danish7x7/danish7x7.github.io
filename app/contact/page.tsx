@@ -39,7 +39,7 @@ export default function Contact() {
             Have a project in mind? Want to collaborate? Or just want to say hi?
           </p>
           <p className="font-mono text-sm text-gray-500">
-            I typically respond within 24 hours.
+            I typically respond within 2 hours.
           </p>
         </div>
 
@@ -82,8 +82,8 @@ export default function Contact() {
             </span>
           </div>
           <p className="font-mono text-sm text-gray-400 max-w-2xl mx-auto">
-            Currently open to freelance projects, full-time opportunities, and interesting collaborations.
-            Specializing in AI/ML, full-stack development, and creative web experiences.
+            Currently open to full-time opportunities and interesting collaborations.
+            Specializing in AI/ML, Data Science, full-stack development, and creative web experiences.
           </p>
         </div>
 
@@ -94,8 +94,7 @@ export default function Contact() {
           </p>
           <div className="flex justify-center gap-6">
             {[
-              { name: 'Discord', value: 'username#0000' },
-              { name: 'Telegram', value: '@username' },
+              { name: 'Discord', value: 'remarkable_cicada' }
             ].map((platform, index) => (
               <div
                 key={index}
