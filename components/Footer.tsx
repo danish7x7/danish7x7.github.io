@@ -30,7 +30,7 @@ export default function Footer() {
             </h3>
             <div className="flex gap-4">
               <a
-                href="https://github.com/yourusername"
+                href="https://github.com/danish7x7"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-neon-blue transition-colors duration-300"
@@ -39,14 +39,14 @@ export default function Footer() {
                 <Github size={20} />
               </a>
               <a
-                href="mailto:your.email@example.com"
+                href="mailto:danishbirsinghbhatti@gmail.com"
                 className="text-gray-400 hover:text-neon-green transition-colors duration-300"
                 aria-label="Email"
               >
                 <Mail size={20} />
               </a>
               <a
-                href="https://linkedin.com/in/yourusername"
+                href="https://linkedin.com/in/danishbir-singh-bhatti"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-neon-purple transition-colors duration-300"

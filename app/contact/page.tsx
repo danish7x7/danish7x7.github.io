@@ -1,36 +1,29 @@
 'use client'
 
-import { Mail, Github, Linkedin, Twitter } from 'lucide-react'
+import { Mail, Github, Linkedin } from 'lucide-react'
 
 export default function Contact() {
   const contactMethods = [
     {
       name: 'Email',
-      value: 'your.email@example.com',
-      href: 'mailto:your.email@example.com',
+      value: 'danishbirsinghbhatti@gmail.com',
+      href: 'mailto:danishbirsinghbhatti@gmail.com',
       icon: Mail,
       color: 'neon-blue',
     },
     {
       name: 'GitHub',
-      value: '@yourusername',
-      href: 'https://github.com/yourusername',
+      value: '@danish7x7',
+      href: 'https://github.com/danish7x7',
       icon: Github,
       color: 'neon-green',
     },
     {
       name: 'LinkedIn',
-      value: '/in/yourname',
-      href: 'https://linkedin.com/in/yourname',
+      value: '/in/danishbir-singh-bhatti',
+      href: 'https://www.linkedin.com/in/danishbir-singh-bhatti/',
       icon: Linkedin,
       color: 'neon-purple',
-    },
-    {
-      name: 'Twitter',
-      value: '@yourhandle',
-      href: 'https://twitter.com/yourhandle',
-      icon: Twitter,
-      color: 'neon-pink',
     },
   ]
 
